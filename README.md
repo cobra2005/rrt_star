@@ -33,10 +33,10 @@ Chương trình này triển khai thuật toán RRT\* (Rapidly-exploring Random 
 
 ### 3.2. Thông số cấu hình
 
-max_iter = 5000 # Số lần lặp tối đa
-step_size = 25 # Khoảng cách bước tối đa
-goal_sample_rate = 0.1 # Xác suất lấy mẫu về đích
-gamma = 150.0 # Tham số điều chỉnh bán kính tìm kiếm
+- max_iter = 5000 # Số lần lặp tối đa
+- step_size = 25 # Khoảng cách bước tối đa
+- goal_sample_rate = 0.1 # Xác suất lấy mẫu về đích
+- gamma = 150.0 # Tham số điều chỉnh bán kính tìm kiếm
 
 ## 4. Thuật toán RRT\*
 
