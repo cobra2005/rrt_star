@@ -52,10 +52,11 @@ class RRTStar:
         self.goal_nodes = []
         self.current_iter = 0
         self.found_path = None
+        self.best_path = None
         
     def step(self) -> bool:
         """Thực hiện một bước của thuật toán, trả về True nếu tìm thấy đường đi"""
-        if self.current_iter >= self.max_iter or self.found_path:
+        if self.current_iter >= self.max_iter:
             return False
             
         x_rand = self.sample()
@@ -107,13 +108,18 @@ class RRTStar:
                 temp_goal.cost = x_new.cost + self.line_cost(x_new, self.goal)
                 self.goal_nodes.append(temp_goal)
                 
-                # Cập nhật đường đi tốt nhất
-                if not self.found_path or temp_goal.cost < self.found_path[1]:
+                # Luôn cập nhật đường đi tốt nhất khi tìm thấy
+                if not self.best_path or temp_goal.cost < self.best_path[1]:
                     path = self.extract_path(temp_goal)
-                    self.found_path = (path, temp_goal.cost)
+                    self.best_path = (path, temp_goal.cost)
         
         self.current_iter += 1
-        return self.found_path is not None
+
+        # Chỉ trả về True khi đã hoàn thành tất cả các lần lặp
+        if self.current_iter >= self.max_iter:
+            self.found_path = self.best_path
+            return True
+        return False
 
     def sample(self) -> Node:
         if random.random() < self.goal_sample_rate:
@@ -247,8 +253,8 @@ def main():
     best_path = None
     
     # Font cho hiển thị thông tin
-    font = pygame.font.SysFont('Arial', 24)
-    small_font = pygame.font.SysFont('Arial', 18)
+    font = pygame.font.SysFont('Times New Roman', 24)
+    small_font = pygame.font.SysFont('Times New Roman', 18)
     
     # Vòng lặp chính
     while running:
@@ -275,7 +281,7 @@ def main():
             # Thực hiện một hoặc nhiều bước của RRT*
             for _ in range(animation_speed):
                 if rrt_star.step():
-                    best_path = rrt_star.found_path[0]
+                    best_path = rrt_star.found_path[0] if rrt_star.found_path else None
         
         # Vẽ màn hình
         screen.fill(WHITE)
